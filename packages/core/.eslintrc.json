@@ -1,8 +1,1 @@
-{
-  "extends": [
-    "../../.eslintrc.cjs"
-  ],
-  "ignorePatterns": [
-    "!**/*"
-  ]
-}
+{"extends": ["../../.eslintrc.cjs"], "ignorePatterns": ["!**/*"]}

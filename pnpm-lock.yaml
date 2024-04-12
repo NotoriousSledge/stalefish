@@ -8,6 +8,9 @@ importers:
 
   .:
     devDependencies:
+      '@tsconfig/node20':
+        specifier: ^20.1.2
+        version: 20.1.4
       '@types/eslint':
         specifier: ^8.56.2
         version: 8.56.9
@@ -56,6 +59,8 @@ importers:
       zod:
         specifier: ^3.22.4
         version: 3.22.4
+
+  packages/core: {}
 
 packages:
 
@@ -386,6 +391,10 @@ packages:
   /@pkgr/core@0.1.1:
     resolution: {integrity: sha512-cq8o4cWH0ibXh9VGi5P20Tu9XF/0fFXl9EUinr9QfTM7a7p0oTA4iJRCQWppXR1Pg8dSM0UCItCkPwsk9qWWYA==}
     engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
+    dev: true
+
+  /@tsconfig/node20@20.1.4:
+    resolution: {integrity: sha512-sqgsT69YFeLWf5NtJ4Xq/xAF8p4ZQHlmGW74Nu2tD4+g5fAsposc4ZfaaPixVu4y01BEiDCWLRDCvDM5JOsRxg==}
     dev: true
 
   /@types/eslint@8.56.9:

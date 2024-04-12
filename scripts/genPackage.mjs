@@ -1,9 +1,15 @@
 // @ts-check
 import fs from 'node:fs';
 import path from 'node:path';
+import sh from 'node:child_process';
 import {deserializeArgumentList} from 'deez-argv';
 import {z} from 'zod';
 import {ParseError, projectRoot} from './lib.mjs';
+
+const eslint = {
+  extends: ['../../.eslintrc.cjs'],
+  ignorePatterns: ['!**/*'],
+};
 
 const argSchema = z.object({
   name: z.string(),
@@ -28,3 +34,10 @@ const pkg = fs.readFileSync(pkgPath, {encoding: 'utf8'});
 fs.writeFileSync(pkgPath, pkg.replaceAll('${sample}', args.name), {
   encoding: 'utf8',
 });
+
+fs.writeFileSync(path.join(outDir, '.eslintrc.json'), JSON.stringify(eslint), {
+  encoding: 'utf8',
+});
+
+process.chdir(outDir);
+sh.execSync('pnpm format && pnpm lint', {stdio: 'inherit'});
