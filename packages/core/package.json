@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "name": "core",
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint ./src --fix",
+    "format": "prettier . --write --cache --log-level=warn --config=../../.prettierrc.json",
+    "test": "node ../../scripts/test.mjs --package=core"
+  },
+  "repository": {
+    "url": "https://github.com/NotoriousSledge/Stalefish"
+  },
+  "dependencies": {},
+  "license": "MIT",
+  "author": "NotoriousSledge",
+  "devDependencies": {}
+}
