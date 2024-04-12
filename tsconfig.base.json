@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "@tsconfig/node20/tsconfig.json",
+  "compilerOptions": {
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "checkJs": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ES2022"
+    ],
+    "noEmit": true,
+    "noImplicitReturns": true,
+    "noUncheckedIndexedAccess": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "ESNext",
+    "module": "ES2022",
+    "moduleResolution": "node"
+  },
+  "include": [
+    ".eslintrc.cjs",
+    "prettier.config.cjs",
+    "scripts",
+    "scripts/*.mjs",
+    "tailwind.config.mjs",
+    "astro.config.mjs",
+    "sst.config.ts",
+    "packages/**/*.ts",
+    "packages/**/*.d.ts"
+  ]
+}
