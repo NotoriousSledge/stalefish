@@ -13,7 +13,7 @@ const config = {
   parser: '@typescript-eslint/parser',
   parserOptions: {
     tsconfigRootDir: __dirname,
-    project: path.join(__dirname, 'tsconfig.base.json'),
+    project: true,
     sourceType: 'module',
     ecmaVersion: 2020,
   },
