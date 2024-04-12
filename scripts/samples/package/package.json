@@ -4,15 +4,27 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "test": "node ../../scripts/test.mjs --package=${sample}",
+    "build": "node ../../scripts/build.mjs --package=${sample} --input=./src/index.ts",
     "lint": "eslint ./src --fix",
-    "format": "prettier . --write --cache --log-level=warn --config=../../.prettierrc.json",
-    "test": "node ../../scripts/test.mjs --package=${sample}"
+    "format": "prettier . --write --cache --log-level=warn --config=../../.prettierrc.json"
   },
+  "files": [
+    "dist",
+    "types"
+  ],
   "repository": {
     "url": "https://github.com/NotoriousSledge/Stalefish"
   },
   "dependencies": {},
   "license": "MIT",
   "author": "NotoriousSledge",
-  "devDependencies": {}
+  "devDependencies": {},
+  "exports": {
+    ".": {
+      "types": "./types/index.d.ts",
+      "require": "./dist/cjs/index.cjs",
+      "import": "./dist/esm/index.mjs"
+    }
+  }
 }

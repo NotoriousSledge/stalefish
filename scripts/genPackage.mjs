@@ -2,21 +2,15 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import sh from 'node:child_process';
-import {deserializeArgumentList} from 'deez-argv';
 import {z} from 'zod';
-import {ParseError, projectRoot} from './lib.mjs';
+import {getArgs, projectRoot} from './lib.mjs';
 import {eslint, tsconfig, tsconfigSpec} from './samples/constants.mjs';
 
-const argSchema = z.object({
-  name: z.string(),
-});
-
-let args;
-try {
-  args = argSchema.parse(deserializeArgumentList());
-} catch (e) {
-  throw new ParseError(/** @type {never}*/ (e));
-}
+const args = getArgs(
+  z.object({
+    name: z.string(),
+  }),
+);
 const outDir = path.join(projectRoot, 'packages', args.name);
 fs.mkdirSync(outDir);
 

@@ -6,21 +6,15 @@ import test from 'node:test';
 import {spec} from 'node:test/reporters';
 import {z} from 'zod';
 import {globIterate} from 'glob';
-import {deserializeArgumentList} from 'deez-argv';
 import {build} from 'esbuild';
-import {ParseError, excludeExternalDependencies, projectRoot} from './lib.mjs';
+import {excludeExternalDependencies, getArgs, projectRoot} from './lib.mjs';
 
 process.env['NODE_ENV'] = 'test';
-const argSchema = z.object({
-  package: z.string(),
-});
-
-let args;
-try {
-  args = argSchema.parse(deserializeArgumentList());
-} catch (e) {
-  throw new ParseError(/** @type {never}*/ (e));
-}
+const args = getArgs(
+  z.object({
+    package: z.string(),
+  }),
+);
 
 const packageDir = path.join(projectRoot, 'packages', args.package);
 const outDir = path.join(packageDir, 'dist', 'test');

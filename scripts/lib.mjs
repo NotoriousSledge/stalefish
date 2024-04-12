@@ -2,9 +2,19 @@
 import path from 'node:path';
 import fs from 'node:fs';
 import nodeURL from 'node:url';
+import {deserializeArgumentList} from 'deez-argv';
 
 export const dirname = path.dirname(nodeURL.fileURLToPath(import.meta.url));
 export const projectRoot = path.join(dirname, '..');
+
+/** @type {import("./types").ParseArgumentList} */
+export const getArgs = (schema) => {
+  try {
+    return schema.parse(deserializeArgumentList());
+  } catch (e) {
+    throw new ParseError(/** @type {never}*/ (e));
+  }
+};
 
 /** @type {import("esbuild").Plugin} */
 export const excludeExternalDependencies = {
