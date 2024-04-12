@@ -1,12 +1,12 @@
 // @ts-check
-import {deserializeArgumentList} from 'deez-argv';
-import {globIterate} from 'glob';
 import path from 'node:path';
 import fs from 'node:fs';
-import {z} from 'zod';
 import {once} from 'node:events';
 import test from 'node:test';
 import {spec} from 'node:test/reporters';
+import {z} from 'zod';
+import {globIterate} from 'glob';
+import {deserializeArgumentList} from 'deez-argv';
 import {build} from 'esbuild';
 import {ParseError, excludeExternalDependencies, projectRoot} from './lib.mjs';
 
@@ -19,18 +19,15 @@ let args;
 try {
   args = argSchema.parse(deserializeArgumentList());
 } catch (e) {
-  throw new ParseError(e);
+  throw new ParseError(/** @type {never}*/ (e));
 }
 
-const outDir = path.join(projectRoot, 'dist', 'test', args.package);
+const packageDir = path.join(projectRoot, 'packages', args.package);
+const outDir = path.join(packageDir, 'dist', 'test');
 
-const tsconfig = path.join(
-  projectRoot,
-  'packages',
-  args.package,
-  'tsconfig.spec.json',
-);
-const builtFiles = new Array();
+const tsconfig = path.join(packageDir, 'tsconfig.spec.json');
+/** @type {Array<string>}*/
+const builtFiles = [];
 /** @param {string} file */
 
 const buildFile = async (file) => {
@@ -99,7 +96,7 @@ const write = (byte) => {
 
 /** @typedef {ReturnType<typeof test.run>} TestsStream} */
 
-process.chdir(path.join(projectRoot, 'packages', args.package));
+process.chdir(packageDir);
 const pattern = ['**/*.test.ts', '**/*.spec.ts'];
 
 try {

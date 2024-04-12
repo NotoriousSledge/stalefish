@@ -57,16 +57,16 @@ function handleLocalImport(args) {
   };
 }
 
-/** @param {string} path */
+/** @param {string} fp */
 
-function resolveImportExtension(path) {
-  if (fs.existsSync(path)) {
-    path += '/index.ts';
+function resolveImportExtension(fp) {
+  if (fs.existsSync(fp)) {
+    fp += '/index.ts';
   } else {
-    path += '.ts';
+    fp += '.ts';
   }
 
-  return path;
+  return fp;
 }
 
 /**
@@ -97,20 +97,13 @@ export class ParseError extends Error {
 
 export function formatZodErrors(errors) {
   return Object.entries(errors)
-
     .map(([name, value]) => {
-      if (value && '_errors' in value) {
+      if ('_errors' in value) {
         return `${name}: ${value._errors.join(', ')}`;
       }
 
-      if (value) {
-        return `${value.join(', ')}`;
-      }
-
-      return undefined;
+      return `${value.join(', ')}`;
     })
-
     .filter(Boolean)
-
     .join('\n');
 }

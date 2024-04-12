@@ -5,11 +5,7 @@ import sh from 'node:child_process';
 import {deserializeArgumentList} from 'deez-argv';
 import {z} from 'zod';
 import {ParseError, projectRoot} from './lib.mjs';
-
-const eslint = {
-  extends: ['../../.eslintrc.cjs'],
-  ignorePatterns: ['!**/*'],
-};
+import {eslint, tsconfig, tsconfigSpec} from './samples/constants.mjs';
 
 const argSchema = z.object({
   name: z.string(),
@@ -38,6 +34,17 @@ fs.writeFileSync(pkgPath, pkg.replaceAll('${sample}', args.name), {
 fs.writeFileSync(path.join(outDir, '.eslintrc.json'), JSON.stringify(eslint), {
   encoding: 'utf8',
 });
+fs.writeFileSync(path.join(outDir, 'tsconfig.json'), JSON.stringify(tsconfig), {
+  encoding: 'utf8',
+});
+
+fs.writeFileSync(
+  path.join(outDir, 'tsconfig.spec.json'),
+  JSON.stringify(tsconfigSpec),
+  {
+    encoding: 'utf8',
+  },
+);
 
 process.chdir(outDir);
 sh.execSync('pnpm format && pnpm lint', {stdio: 'inherit'});
