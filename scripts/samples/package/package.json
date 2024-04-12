@@ -1,11 +1,12 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
-  "name": "sample",
+  "name": "${sample}",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "lint": "eslint ./src --fix",
-    "format": "prettier . --write --cache --log-level=warn --config=../../.prettierrc.json"
+    "format": "prettier . --write --cache --log-level=warn --config=../../.prettierrc.json",
+    "test": "node ../../scripts/test.mjs --package=${sample}"
   },
   "repository": {
     "url": "https://github.com/NotoriousSledge/Stalefish"
