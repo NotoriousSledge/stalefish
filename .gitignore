@@ -2,6 +2,7 @@
 node_modules
 .build
 dist
+types/
 # misc
 .DS_Store
 # local env files

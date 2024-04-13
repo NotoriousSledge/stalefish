@@ -1,18 +1,21 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
-  "name": "${sample}",
+  "name": "@stalefish/${sample}",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "test": "node ../../scripts/test.mjs --package=${sample}",
     "build": "node ../../scripts/build.mjs --package=${sample} --input=./src/index.ts",
+    "build:types": "node ../../scripts/buildTypes.mjs --package=${sample} --input=./src/index.ts",
     "lint": "eslint ./src --fix",
-    "format": "prettier . --write --cache --log-level=warn --config=../../.prettierrc.json"
+    "format": "prettier . --write --cache --log-level=warn --config=../../.prettierrc.json",
+    "prepublishOnly": "npm run build && npm run build:types"
   },
   "files": [
     "dist",
     "types"
   ],
+  "types": "./types/index.d.ts",
   "repository": {
     "url": "https://github.com/NotoriousSledge/Stalefish"
   },

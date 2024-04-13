@@ -21,7 +21,7 @@ fs.cpSync(path.join(projectRoot, 'scripts', 'samples', 'package'), outDir, {
 
 const pkgPath = path.join(outDir, 'package.json');
 const pkg = fs.readFileSync(pkgPath, {encoding: 'utf8'});
-fs.writeFileSync(pkgPath, pkg.replaceAll('${sample}', args.name), {
+fs.writeFileSync(pkgPath, pkg.replaceAll('${sample}', `${args.name}`), {
   encoding: 'utf8',
 });
 
