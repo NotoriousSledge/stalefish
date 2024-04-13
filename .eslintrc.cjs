@@ -56,13 +56,19 @@ const config = {
           match: true,
         },
       },
+      {
+        selector: 'variable',
+        format: ['snake_case', 'UPPER_CASE'],
+        leadingUnderscore: 'allow',
+        trailingUnderscore: 'forbid',
+      },
     ],
     '@typescript-eslint/no-empty-function': 'off',
     '@typescript-eslint/no-empty-interface': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',
     '@typescript-eslint/no-unnecessary-condition': 'warn',
     '@typescript-eslint/no-unnecessary-type-assertion': 'warn',
-    '@typescript-eslint/no-explicit-any': 'warn',
+    '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-unused-vars': [
       'warn',
       {

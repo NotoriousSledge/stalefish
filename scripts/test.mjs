@@ -7,38 +7,38 @@ import {spec} from 'node:test/reporters';
 import {z} from 'zod';
 import {globIterate} from 'glob';
 import {build} from 'esbuild';
-import {excludeExternalDependencies, getArgs, projectRoot} from './lib.mjs';
+import {exclude_external_dependencies, get_args, project_root} from './lib.mjs';
 
 process.env['NODE_ENV'] = 'test';
-const args = getArgs(
+const args = get_args(
   z.object({
     package: z.string(),
   }),
 );
 
-const packageDir = path.join(projectRoot, 'packages', args.package);
-const outDir = path.join(packageDir, 'dist', 'test');
+const package_dir = path.join(project_root, 'packages', args.package);
+const out_dir = path.join(package_dir, 'dist', 'test');
 
-const tsconfig = path.join(packageDir, 'tsconfig.spec.json');
+const tsconfig = path.join(package_dir, 'tsconfig.spec.json');
 /** @type {Array<string>}*/
-const builtFiles = [];
+const built_files = [];
 /** @param {string} file */
 
-const buildFile = async (file) => {
-  const baseOut = path.join(
-    outDir,
+const build_file = async (file) => {
+  const base_out = path.join(
+    out_dir,
     path.basename(file).replace(/\.ts$/, '.mjs'),
   );
 
-  let outfile = baseOut;
+  let outfile = base_out;
 
   let i = 1;
 
-  while (builtFiles.includes(outfile)) {
-    outfile = `${baseOut.slice(0, -4)}_${i++}.mjs`;
+  while (built_files.includes(outfile)) {
+    outfile = `${base_out.slice(0, -4)}_${i++}.mjs`;
   }
 
-  builtFiles.push(outfile);
+  built_files.push(outfile);
 
   const input = path.resolve(file);
 
@@ -51,7 +51,7 @@ const buildFile = async (file) => {
     format: 'esm',
     platform: 'node',
     tsconfig,
-    plugins: [excludeExternalDependencies],
+    plugins: [exclude_external_dependencies],
     bundle: true,
     sourcemap: true,
     entryPoints: [input],
@@ -62,11 +62,11 @@ const buildFile = async (file) => {
 
 /** @param {string[]} pattern */
 
-const identifyAndBuild = async (pattern) => {
+const identify_and_build = async (pattern) => {
   const result = [];
 
   for await (const file of globIterate(pattern)) {
-    result.push(buildFile(file));
+    result.push(build_file(file));
   }
 
   return Promise.all(result);
@@ -90,13 +90,13 @@ const write = (byte) => {
 
 /** @typedef {ReturnType<typeof test.run>} TestsStream} */
 
-process.chdir(packageDir);
+process.chdir(package_dir);
 const pattern = ['**/*.test.ts', '**/*.spec.ts'];
 
 try {
-  await identifyAndBuild(pattern)
-    .then(() => process.chdir(projectRoot))
-    .then(() => test.run({files: builtFiles, concurrency: true}))
+  await identify_and_build(pattern)
+    .then(() => process.chdir(project_root))
+    .then(() => test.run({files: built_files, concurrency: true}))
     .then((s) => /** @type {spec} */ (s.compose(new spec())))
     .then((s) => s.on('data', write))
     .then((s) => once(s, 'end'));

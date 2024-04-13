@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "gen:package": "node ./scripts/genPackage.mjs"
+    "gen:package": "node ./scripts/gen_package.mjs"
   },
   "keywords": [],
   "license": "MIT",

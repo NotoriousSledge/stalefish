@@ -3,7 +3,7 @@ import path from 'node:path';
 import fs from 'node:fs';
 import {build} from 'esbuild';
 import {z} from 'zod';
-import {excludeExternalDependencies, getArgs, projectRoot} from './lib.mjs';
+import {exclude_external_dependencies, get_args, project_root} from './lib.mjs';
 
 const formats = /** @type {const} */ ([
   {
@@ -16,29 +16,29 @@ const formats = /** @type {const} */ ([
   },
 ]);
 
-const args = getArgs(
+const args = get_args(
   z.object({
     package: z.string(),
     input: z.string(),
   }),
 );
 
-const packageDir = path.join(projectRoot, 'packages', args.package);
-const outDir = path.join(packageDir, 'dist');
-const entryPoints = [path.join(packageDir, args.input)];
+const package_dir = path.join(project_root, 'packages', args.package);
+const out_dir = path.join(package_dir, 'dist');
+const entry_points = [path.join(package_dir, args.input)];
 
 for (const format of formats) {
-  const outFile = `index${format.ext}`;
-  const formatOut = path.join(outDir, format.name);
-  fs.rmSync(formatOut, {force: true, recursive: true});
+  const out_file = `index${format.ext}`;
+  const format_out = path.join(out_dir, format.name);
+  fs.rmSync(format_out, {force: true, recursive: true});
   await build({
     format: format.name,
-    entryPoints,
+    entryPoints: entry_points,
     sourcemap: true,
     bundle: true,
-    plugins: [excludeExternalDependencies],
+    plugins: [exclude_external_dependencies],
     treeShaking: true,
-    outfile: path.join(formatOut, outFile),
+    outfile: path.join(format_out, out_file),
     platform: 'node',
     outExtension: {'.js': '.cjs'},
   });

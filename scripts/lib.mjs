@@ -5,10 +5,10 @@ import nodeURL from 'node:url';
 import {deserializeArgumentList} from 'deez-argv';
 
 export const dirname = path.dirname(nodeURL.fileURLToPath(import.meta.url));
-export const projectRoot = path.join(dirname, '..');
+export const project_root = path.join(dirname, '..');
 
 /** @type {import("./types").ParseArgumentList} */
-export const getArgs = (schema) => {
+export const get_args = (schema) => {
   try {
     return schema.parse(deserializeArgumentList());
   } catch (e) {
@@ -17,7 +17,7 @@ export const getArgs = (schema) => {
 };
 
 /** @type {import("esbuild").Plugin} */
-export const excludeExternalDependencies = {
+export const exclude_external_dependencies = {
   name: 'exlude-external-dependencies',
   setup(build) {
     let filter = /^./;
@@ -28,11 +28,11 @@ export const excludeExternalDependencies = {
       }
 
       if (args.path.startsWith('@/')) {
-        return handleLocalLibImport(args);
+        return handle_local_lib_import(args);
       }
 
       if (args.path.startsWith('$/')) {
-        return handleLocalLibImport(args);
+        return handle_local_lib_import(args);
       }
 
       if (args.path.startsWith('.')) {
@@ -45,17 +45,17 @@ export const excludeExternalDependencies = {
 };
 
 /** @param {import("esbuild").OnResolveArgs} args */
-function handleLocalLibImport(args) {
+const handle_local_lib_import = (args) => {
   const i = args.path.indexOf('/');
   const p = resolveImportExtension(
-    path.join(projectRoot, 'packages', args.path.slice(i)),
+    path.join(project_root, 'packages', args.path.slice(i)),
   );
 
   return {
     path: p,
     external: false,
   };
-}
+};
 
 /** @param {import("esbuild").OnResolveArgs} args */
 function handleLocalImport(args) {
@@ -89,7 +89,7 @@ export class ParseError extends Error {
   /** @param {import('zod').ZodError<unknown>} zodError */
 
   constructor(zodError) {
-    super(formatZodErrors(zodError.format()));
+    super(format_zod_errors(zodError.format()));
 
     this.name = 'ParseError';
 
@@ -105,7 +105,7 @@ export class ParseError extends Error {
  *
  *    * */
 
-export function formatZodErrors(errors) {
+export const format_zod_errors = (errors) => {
   return Object.entries(errors)
     .map(([name, value]) => {
       if ('_errors' in value) {
@@ -116,4 +116,4 @@ export function formatZodErrors(errors) {
     })
     .filter(Boolean)
     .join('\n');
-}
+};

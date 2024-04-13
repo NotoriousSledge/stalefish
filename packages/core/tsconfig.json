@@ -5,6 +5,13 @@
     "module": "esnext",
     "moduleResolution": "node",
     "baseUrl": ".",
-    "paths": {"@/": ["./src/*"], "$/": ["../*"]}
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ],
+      "$/*": [
+        "../*"
+      ]
+    }
   }
 }
