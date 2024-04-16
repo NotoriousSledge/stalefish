@@ -7,7 +7,7 @@ export const TS_CONFIG = {
     baseUrl: '.',
     paths: {
       '@/*': ['./src/*'],
-      '$/*': ['../*'],
+      '$/*': ['../lib/src/*'],
     },
   },
 };

@@ -1,1 +1,1 @@
-export const greet = () => console.log('Hi Mom!');
+export * from "./query_client/query_client"

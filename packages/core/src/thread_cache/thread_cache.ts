@@ -7,7 +7,7 @@ export class ThreadCache {
   readonly run = async <T>(
     generator: () => Promise<T>,
     partition_key: string,
-    sort_keys: Array<string>,
+    sort_keys: Array<string> | string,
     ttl?: number,
   ): Promise<Result<T>> => {
     const sort_key = format_sort_key(sort_keys);
@@ -35,13 +35,19 @@ export class ThreadCache {
     );
   };
 
-  readonly has = (partition_key: string, sort_keys: Array<string>): boolean => {
+  readonly has = (
+    partition_key: string,
+    sort_keys: Array<string> | string,
+  ): boolean => {
     return Boolean(
       this.#state.get(partition_key)?.has(format_sort_key(sort_keys)),
     );
   };
 
-  readonly reset = (partition_key: string, sort_keys: Array<string>): void => {
+  readonly reset = (
+    partition_key: string,
+    sort_keys: Array<string> | string,
+  ): void => {
     this.#state.get(partition_key)?.delete(format_sort_key(sort_keys));
   };
 }

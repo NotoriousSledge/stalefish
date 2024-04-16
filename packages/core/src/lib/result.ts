@@ -1,4 +1,4 @@
-import {to_error} from './errors';
+import {to_error} from '$/errors';
 
 export type Result<TValue, TError extends Error = Error> =
   | {isOk: true; value: TValue; isErr: false}

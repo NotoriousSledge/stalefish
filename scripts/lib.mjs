@@ -2,7 +2,7 @@
 import path from 'node:path';
 import fs from 'node:fs';
 import nodeURL from 'node:url';
-import {deserializeArgumentList} from 'deez-argv';
+import { deserializeArgumentList } from 'deez-argv';
 
 export const dirname = path.dirname(nodeURL.fileURLToPath(import.meta.url));
 export const project_root = path.join(dirname, '..');
@@ -12,7 +12,7 @@ export const get_args = (schema) => {
   try {
     return schema.parse(deserializeArgumentList());
   } catch (e) {
-    throw new ParseError(/** @type {never}*/ (e));
+    throw new ParseError(/** @type {never}*/(e));
   }
 };
 
@@ -22,13 +22,13 @@ export const exclude_external_dependencies = {
   setup(build) {
     let filter = /^./;
 
-    build.onResolve({filter}, (args) => {
+    build.onResolve({ filter }, (args) => {
       if (args.kind === 'entry-point') {
-        return {path: args.path, external: false};
+        return { path: args.path, external: false };
       }
 
       if (args.path.startsWith('@/')) {
-        return handle_local_lib_import(args);
+        return handle_local_src_import(args);
       }
 
       if (args.path.startsWith('$/')) {
@@ -39,16 +39,34 @@ export const exclude_external_dependencies = {
         return handleLocalImport(args);
       }
 
-      return {path: args.path, external: true};
+      return { path: args.path, external: true };
     });
   },
+};
+
+/** @param {import("esbuild").OnResolveArgs} args */
+const handle_local_src_import = (args) => {
+  const i = args.path.indexOf('/');
+  const lib_name = args.importer.match(/.+packages\/(.+)\/src.*/)?.at(1);
+  if (!lib_name) {
+    return undefined;
+  }
+
+  const p = resolveImportExtension(
+    path.join(project_root, 'packages', lib_name, 'src', args.path.slice(i)),
+  );
+
+  return {
+    path: p,
+    external: false,
+  };
 };
 
 /** @param {import("esbuild").OnResolveArgs} args */
 const handle_local_lib_import = (args) => {
   const i = args.path.indexOf('/');
   const p = resolveImportExtension(
-    path.join(project_root, 'packages', args.path.slice(i)),
+    path.join(project_root, 'packages/lib/src', args.path.slice(i)),
   );
 
   return {

@@ -1,12 +1,12 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
-  "name": "@stalefish/core",
-  "version": "0.0.0",
+  "name": "@stalefish/haul",
+  "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "test": "node ../../scripts/test.mjs --package=core",
-    "build": "node ../../scripts/build.mjs --package=core --input=./src/index.ts",
-    "build:types": "tsc",
+    "test": "node ../../scripts/test.mjs --package=haul",
+    "build": "node ../../scripts/build.mjs --package=haul --input=./src/index.ts",
+    "build:types": "node ../../scripts/build_types.mjs --package=haul --input=./src/index.ts",
     "lint": "eslint ./src --fix",
     "format": "prettier . --write --cache --log-level=warn --config=../../.prettierrc.json",
     "prepublishOnly": "npm run build && npm run build:types"

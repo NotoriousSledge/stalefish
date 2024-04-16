@@ -14,7 +14,7 @@ export class QueryClient {
   readonly use = <T>(
     generator: () => Promise<T>,
     partition_key: string,
-    sort_keys: Array<string>,
+    sort_keys: Array<string> | string,
     config?: Partial<CacheConfig>,
   ): Promise<Result<T>> => {
     return this.#cache.run(

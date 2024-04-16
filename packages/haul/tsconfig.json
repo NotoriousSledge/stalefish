@@ -4,10 +4,6 @@
   "compilerOptions": {
     "module": "esnext",
     "moduleResolution": "node",
-    "emitDeclarationOnly": true,
-    "declaration": true,
-    "declarationDir": "./types",
-    "noEmit": false,
     "baseUrl": ".",
     "paths": {
       "@/*": [
@@ -17,9 +13,5 @@
         "../lib/src/*"
       ]
     }
-  },
-  "include": [
-    "./packages/core/src",
-    "../lib/src"
-  ]
+  }
 }

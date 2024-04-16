@@ -1,12 +1,12 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
-  "name": "@stalefish/core",
+  "name": "@stalefish/lib",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "test": "node ../../scripts/test.mjs --package=core",
-    "build": "node ../../scripts/build.mjs --package=core --input=./src/index.ts",
-    "build:types": "tsc",
+    "test": "node ../../scripts/test.mjs --package=lib",
+    "build": "node ../../scripts/build.mjs --package=lib --input=./src/index.ts",
+    "build:types": "node ../../scripts/build_types.mjs --package=lib --input=./src/index.ts",
     "lint": "eslint ./src --fix",
     "format": "prettier . --write --cache --log-level=warn --config=../../.prettierrc.json",
     "prepublishOnly": "npm run build && npm run build:types"
