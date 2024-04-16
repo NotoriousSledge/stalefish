@@ -6,7 +6,7 @@
   "scripts": {
     "test": "node ../../scripts/test.mjs --package=core",
     "build": "node ../../scripts/build.mjs --package=core --input=./src/index.ts",
-    "build:types": "tsc",
+    "build:types": "node ../../scripts/build_types.mjs --package=core --input=./src/index.ts",
     "lint": "eslint ./src --fix",
     "format": "prettier . --write --cache --log-level=warn --config=../../.prettierrc.json",
     "prepublishOnly": "npm run build && npm run build:types"
@@ -19,7 +19,9 @@
   "repository": {
     "url": "https://github.com/NotoriousSledge/Stalefish"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@stalefish/haul": "workspace:*"
+  },
   "license": "MIT",
   "author": "NotoriousSledge",
   "devDependencies": {},

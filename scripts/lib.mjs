@@ -2,7 +2,7 @@
 import path from 'node:path';
 import fs from 'node:fs';
 import nodeURL from 'node:url';
-import { deserializeArgumentList } from 'deez-argv';
+import {deserializeArgumentList} from 'deez-argv';
 
 export const dirname = path.dirname(nodeURL.fileURLToPath(import.meta.url));
 export const project_root = path.join(dirname, '..');
@@ -12,7 +12,7 @@ export const get_args = (schema) => {
   try {
     return schema.parse(deserializeArgumentList());
   } catch (e) {
-    throw new ParseError(/** @type {never}*/(e));
+    throw new ParseError(/** @type {never}*/ (e));
   }
 };
 
@@ -22,9 +22,9 @@ export const exclude_external_dependencies = {
   setup(build) {
     let filter = /^./;
 
-    build.onResolve({ filter }, (args) => {
+    build.onResolve({filter}, (args) => {
       if (args.kind === 'entry-point') {
-        return { path: args.path, external: false };
+        return {path: args.path, external: false};
       }
 
       if (args.path.startsWith('@/')) {
@@ -39,7 +39,7 @@ export const exclude_external_dependencies = {
         return handleLocalImport(args);
       }
 
-      return { path: args.path, external: true };
+      return {path: args.path, external: true};
     });
   },
 };

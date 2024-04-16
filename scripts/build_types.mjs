@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import {createBundle} from 'dts-buddy';
 import {z} from 'zod';
 import {get_args, project_root} from './lib.mjs';
-import tsconfig from 'tsconfig';
+import {globIterate, globSync} from 'glob';
 
 const args = get_args(
   z.object({
@@ -18,15 +18,50 @@ const modules = {};
 modules[`@stalefish/${args.package}`] = path.join(package_dir, args.input);
 
 fs.rmSync(path.join(package_dir, 'types'), {force: true, recursive: true});
-const config = await tsconfig
-  .load(package_dir, 'tsconfig.json')
-  .then((c) => c.config);
+const pkg_config = JSON.parse(
+  // @ts-ignore
+  fs.readFileSync(path.join(package_dir, 'tsconfig.json')),
+);
 
-console.log(config);
+const root_config = JSON.parse(
+  // @ts-ignore
+  fs.readFileSync(path.join(project_root, 'tsconfig.json')),
+);
+
+const config = {
+  ...root_config,
+  ...{
+    compilerOptions: {
+      ...root_config['compilerOptions'],
+      ...pkg_config['compilerOptions'],
+    },
+    include: Array.isArray(pkg_config['include'])
+      ? pkg_config['include']
+      : root_config['include'],
+  },
+};
+
+const include = new Set(['./src/*.ts', '../lib/src/*.ts']);
+for await (const file of globIterate('src/**/*.ts', {
+  root: path.join(package_dir),
+})) {
+  include.add(path.basename(file));
+}
+
+for await (const file of globIterate('../lib/src/**/*.ts', {
+  root: path.join(package_dir),
+})) {
+  include.add(path.basename(file));
+}
+
+console.log(include);
+
+const tsconfig_path = path.join(package_dir, `resolved.tsconfig.json`);
+fs.writeFileSync(tsconfig_path, JSON.stringify(config, null, 2));
 
 await createBundle({
-  project: path.join(project_root, 'tsconfig.json'),
+  project: tsconfig_path,
   output: path.join(package_dir, 'types', 'index.d.ts'),
-  include: [`${path.join(package_dir, 'src')}/*`],
   modules,
+  include: Array.from(include),
 });

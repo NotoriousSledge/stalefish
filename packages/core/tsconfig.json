@@ -4,22 +4,11 @@
   "compilerOptions": {
     "module": "esnext",
     "moduleResolution": "node",
-    "emitDeclarationOnly": true,
-    "declaration": true,
-    "declarationDir": "./types",
-    "noEmit": false,
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./src/*"
-      ],
-      "$/*": [
-        "../lib/src/*"
-      ]
+      "@/*": ["./src/*"],
+      "$/*": ["../lib/src/*"]
     }
   },
-  "include": [
-    "./packages/core/src",
-    "../lib/src"
-  ]
+  "include": ["./src/*.ts", "query_client.ts", "../lib/src/**/*.ts"]
 }

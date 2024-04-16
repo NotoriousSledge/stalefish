@@ -9,3 +9,5 @@ types/
 .env*.local
 logs
 __pycache__
+tsconfig.resolved.json
+resolved.tsconfig.json
