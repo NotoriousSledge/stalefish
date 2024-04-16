@@ -1,18 +1,19 @@
-import type {PartionedMap} from '@/lib';
+import type {PartionedMap, Result} from '@/lib';
+import {ResultFactory, format_sort_key} from '@/lib';
 
-export class ThreadSync {
+export class ThreadCache {
   #state: PartionedMap<Promise<any>> = new Map();
 
-  readonly run = <T>(
+  readonly run = async <T>(
     generator: () => Promise<T>,
     partition_key: string,
     sort_keys: Array<string>,
     ttl?: number,
-  ): Promise<T> => {
-    const sort_key = this.#format_sort_key(sort_keys);
+  ): Promise<Result<T>> => {
+    const sort_key = format_sort_key(sort_keys);
     const cached = this.#state.get(partition_key)?.get(sort_key);
     if (cached) {
-      return cached as Promise<T>;
+      return ResultFactory.fromPromise(cached);
     }
 
     const promise = generator();
@@ -23,22 +24,24 @@ export class ThreadSync {
     }
 
     if (typeof ttl === 'number') {
-      setTimeout(() => this.#state.get(partition_key)!.delete(sort_key), ttl);
+      setTimeout(() => this.#state.get(partition_key)?.delete(sort_key), ttl);
     }
 
-    return promise;
+    return ResultFactory.fromPromise(promise).then(
+      ResultFactory.mapErr((e) => {
+        this.#state.get(partition_key)?.delete(sort_key);
+        return e;
+      }),
+    );
   };
 
   readonly has = (partition_key: string, sort_keys: Array<string>): boolean => {
     return Boolean(
-      this.#state.get(partition_key)?.has(this.#format_sort_key(sort_keys)),
+      this.#state.get(partition_key)?.has(format_sort_key(sort_keys)),
     );
   };
 
   readonly reset = (partition_key: string, sort_keys: Array<string>): void => {
-    this.#state.get(partition_key)?.delete(this.#format_sort_key(sort_keys));
+    this.#state.get(partition_key)?.delete(format_sort_key(sort_keys));
   };
-
-  readonly #format_sort_key = (sort_keys: Array<string>) =>
-    sort_keys.sort().join('#');
 }

@@ -15,7 +15,7 @@ const config = {
     tsconfigRootDir: __dirname,
     project: true,
     sourceType: 'module',
-    ecmaVersion: 2020,
+    ecmaVersion: 'latest',
   },
   settings: {
     'import/parsers': {
